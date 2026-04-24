@@ -272,69 +272,29 @@ kubectl get all -n <APP_NAMESPACE>
 **![retore namespace](https://github.com/smogalloyubio/02-Devops-project-NetflixClone-app/blob/main/picture/Screenshot%202026-01-24%20at%2013.36.05.png):**
 
 
-
 ---
 
-## 📂 Repository Structure
-
-```
-.
-├── terraform/          
-├── argocd/              
-├── .github/workflows/  
-├── manifest/      
-├── argocd/         
-├── velero/             
-└── README.md
-```
-
+## Disaster Recovery Validation
+A disaster recovery test was performed to validate the reliability and resilience of the system.
+- A full backup of the application namespace was created using Velero
+- The application namespace (and cluster components) was intentionally deleted to simulate a failure scenario
+- The system was restored using backups stored in Google Cloud Storage (GCS)
+Post-Restore Verification
+After the restore process, the following were confirmed:
+- All pods were successfully recreated
+- Services were restored and accessible
+- The application returned to a fully functional state
+- No data or configuration loss was observed
 ---
+## Security Considerations
 
-## Disaster Recovery Test
-
-* Created a Velero backup for the application namespace
-* Deleted the namespace / cluster
-* Restored from backup stored in GCS
-* Verified:
-
-  * Pods recreated successfully
-  * Services accessible
-  * Application functional after restore
-
----
-
-## 🔐 Security Considerations
-
-* IAM roles follow least-privilege principle
-* Service accounts scoped per component
-* No secrets stored in Git
-* GitOps provides full audit trail
-
----
-
-## 📈 Future Improvements
-
-* Automated Velero backup schedules
-* Terraform remote state in GCS
-* Workload Identity for GKE
-* Sealed Secrets for secret management
-* Canary or blue/green deployments
-* Monitoring with Prometheus and Grafana
-
----
-
-## skills Demonstrated
-
-* Kubernetes operations on GKE
-* Infrastructure as Code with Terraform
-* CI/CD pipeline design
-* GitOps with Argo CD
-* Disaster recovery planning and testing
-* Cloud IAM and security best practices
-
+The project follows cloud security best practices to ensure a secure and controlled environment:
+- IAM roles are configured using the principle of least privilege
+- Service accounts are isolated and scoped per component
+- Sensitive information and secrets are not stored in the Git repository
+- GitOps provides a complete audit trail of all infrastructure and deployment changes
 ---
 
 
-**ubioworo rukevwe**
-DevOps / Cloud Engineer
+
 
