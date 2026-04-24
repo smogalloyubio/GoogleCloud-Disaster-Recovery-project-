@@ -1,262 +1,190 @@
-# Netflix Clone on GKE – GitOps CI/CD & Disaster Recovery
-
+## Cloud-Native Web Application on GKE - GitOps CI/CD & Disaster Recovery
+---
 ## Project Overview
-This project demonstrates a **production-ready CI/CD and Disaster Recovery (DR) workflow** by deploying a Netflix Clone application on **Google Kubernetes Engine (GKE)** using 
-**GitOps principles**.
-The solution automates infrastructure provisioning, container image delivery, application deployment, and disaster recovery. It is designed to simulate real-world DevOps challenges such as cluster failures, human error during deployments, and the need for fast, reliable recovery.
+This project demonstrates a production-grade CI/CD and Disaster Recovery (DR) pipeline for deploying a cloud-native web application on Google Kubernetes Engine (GKE) using GitOps principles.
+The solution automates the full application lifecycle, including infrastructure provisioning, container image delivery, Kubernetes deployment, and full cluster backup/recovery. It is designed to simulate real-world DevOps challenges—such as infrastructure failures, human deployment errors, and data loss—while ensuring the system can be rapidly restored with minimal downtime.
 
 ---
-
 ##  Problem Statement
-
-Traditional manual deployments introduce several risks:
-
-* Human error during application or infrastructure changes
-* Lack of version control for Kubernetes manifests and infrastructure
-* Difficult and slow recovery from namespace or cluster failures
-
-This project addresses those problems by:
-
-* Automating infrastructure provisioning
-* Using Git as the single source of truth
-* Implementing a tested disaster recovery strategy
-
+- Modern application deployment often faces significant operational risks when managed manually:
+- Complexity & Drift: Inconsistent environments between development and production.
+- Human Error: Manual configuration changes leading to outages.
+- Recovery RTO/RPO: Slow and unreliable recovery from system or namespace failures due to a lack of backups.
+- Standardization: Difficulty in achieving fast iteration cycles while maintaining high stability.
 ---
-
 ## Project Goals
-
-* Automate deployment of a containerized application
-* Provision GKE infrastructure using Infrastructure as Code (IaC)
-* Implement GitOps-based continuous delivery with Argo CD
-* Store and version Kubernetes manifests in GitHub
-* Push Docker images to Google Artifact Registry
-* Back up and restore Kubernetes resources and persistent data
-* Validate recovery by deleting and restoring a namespace or cluster
-
----
-
-##  Architecture Overview
-
-**Infrastructure Layer**
-
-* GKE cluster provisioned with Terraform
-* Google Artifact Registry for container images
-* Google Cloud Storage (GCS) bucket for Velero backups
-
-**CI/CD & GitOps Layer**
-
-* GitHub Actions pipeline builds and pushes Docker images
-* Kubernetes manifests stored in GitHub
-* Argo CD continuously syncs manifests to GKE
-
-**Disaster Recovery Layer**
-
-* Velero configured with GCS
-* Namespace-scoped backups
-* Restore tested after deletion
-
----
-
-## Technologies Used
-
-| Category           | Tools                          |
-| ------------------ | ------------------------------ |
-| Cloud              | Google Cloud Platform (GCP)    |
-| Kubernetes         | Google Kubernetes Engine (GKE) |
-| IaC                | Terraform                      |
-| CI                 | GitHub Actions                 |
-| GitOps             | Argo CD                        |
-| Container Registry | Google Artifact Registry       |
-| Backup & DR        | Velero + GCS                   |
-| Version Control    | Git & GitHub                   |
-| Security           | Service Accounts & IAM         |
-
+- This project provides a comprehensive DevOps framework to bridge the gap between development speed and operational reliability:
+- Infrastructure as Code (IaC): Using Terraform to eliminate manual setup and configuration drift.
+- Immutable Infrastructure: Containerization with Docker and TypeScript for consistent execution.
+- GitOps: Leveraging Argo CD to ensure the cluster state always matches the version-controlled manifests.
+- Resilience: Implementing Velero for automated Kubernetes backups, enabling rapid restoration in disaster scenarios.
 ---
 
 ## Key Features
+- Full-Stack Cloud-Native Architecture: Built with a React (Vite) frontend and Node.js backend for high performance.
+- IaC Provisioning: 100% of the GKE environment is managed via Terraform.
+- Automated CI/CD: GitHub Actions triggers builds and image pushes to Google Artifact Registry.
+- Declarative GitOps: Argo CD manages the "Desired State" of the cluster via GitHub.
+- Disaster Recovery Ready: Integrated with Velero and GCS for full-state snapshots and recovery.
+- Type-Safe Development: Developed using TypeScript to reduce runtime errors and improve maintainability.
+---
+##  Architecture Overview
+**Infrastructure Layer**
+- GKE cluster provisioned with Terraform
+- Google Artifact Registry for container images
+- Google Cloud Storage (GCS) bucket for Velero backups
+**CI/CD & GitOps Layer**
+- GitHub Actions pipeline builds and pushes Docker images
+-  Kubernetes manifests stored in GitHub
+-  Argo CD continuously syncs manifests to GKE
 
-* **Infrastructure as Code**: GKE provisioned using Terraform
-* **CI Pipeline**: Automated Docker image build and push via GitHub Actions
-* **GitOps Deployment**: Argo CD synchronizes cluster state from GitHub
-* **Namespace Isolation**: Application deployed in a dedicated namespace
-* **Disaster Recovery**: Velero backups stored in GCS
-* **Recovery Validation**: Namespace or cluster deletion followed by restore
-* **Resource Optimization**: Manual CPU patching for small-node environments
-* **Security**: Dedicated service accounts and least-privilege IAM roles
-
+**Disaster Recovery Layer**
+- Velero configured with GCS
+- Namespace-scoped backups
+- Restore tested after deletion
 ---
 
+## Technologies Used
+| Technology | Purpose | Key Benefits |
+| :--- | :--- | :--- |
+| **TypeScript / Node.js** | App Development | Strong type safety and scalable runtime. |
+| **React / Vite** | Frontend | Rapid UI rendering and modern build tooling. |
+| **Docker** | Containerization | "Build once, run anywhere" consistency. |
+| **Terraform** | IaC | Automated, versioned infrastructure. |
+| **Argo CD** | GitOps Delivery | Automated synchronization and drift detection. |
+| **Velero** | Disaster Recovery | Protects against cluster or namespace loss. |
+| **GKE** | Orchestration | High availability and self-healing workloads. |
+---
 ##  Workflow
-
-1. Terraform provisions GKE infrastructure
-2. Code push triggers GitHub Actions workflow
-3. Docker image is built and pushed to Artifact Registry
-4. Kubernetes manifests are updated in GitHub
-5. Argo CD syncs manifests to GKE
-6. Application runs in a dedicated namespace
-7. Velero backs up namespace resources to GCS
-8. Namespace or cluster is deleted (failure simulation)
-9. Velero restores workloads and data successfully
-
+- Terraform provisions GKE infrastructure
+- Code push triggers GitHub Actions workflow
+- Docker image is built and pushed to Artifact Registry
+- Kubernetes manifests are updated in GitHub
+- Argo CD syncs manifests to GKE
+- Application runs in a dedicated namespace
+- Velero backs up namespace resources to GCS
+- Namespace or cluster is deleted (failure simulation)
+- Velero restores workloads and data successfully
 ---
-
 ##  Step-by-Step Implementation Guide
+Before deploying the infrastructure, ensure the following tools are installed and properly configured:
+- Google Cloud SDK (gcloud)
+- Terraform
+- Docker
+- kubectl
+- Git
+- A GitHub account
+---
+## GCP Authentication
+Authenticate your local environment or container with Google Cloud:
 
-### Step 1: Prerequisites
-
-Ensure you have the following installed and configured:
-
-* Google Cloud SDK (`gcloud`)
-* Terraform
-* Docker
-* kubectl
-* Git
-* GitHub account
-
-Authenticate with GCP:
-
-```bash
+```
 gcloud auth login
 gcloud config set project <PROJECT_ID>
-gcloud  auth  application-deafult login 
+gcloud  auth  application-deafult login
 ```
-
 ---
 
 ### Step 2: Provision GKE with Terraform
 
 1. Navigate to the Terraform directory:
 
-```bash
-
+```
 sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
-
-
 wget -O- https://apt.releases.hashicorp.com/gpg | \
 gpg --dearmor | \
 sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
-
-
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
 https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
 sudo tee /etc/apt/sources.list.d/hashicorp.list
-
-
 sudo apt-get update && sudo apt-get install terraform
-
 cd terraform
-
 terraform init
 terraform apply
 
 ```
-
+--- 
 Terraform provisions:
-
-* GKE cluster
-* Networking resources
-* Required IAM roles and service accounts
+- GKE cluster
+- Networking resources
+- Required IAM roles and service accounts
 
 **![Terraform  apply command](https://github.com/smogalloyubio/02-Devops-project-NetflixClone-app/blob/main/picture/Screenshot%202026-01-24%20at%2012.18.12.png):**
-
-
-
 ---
-
-### Step 3: Build & Push Docker Image (CI Pipeline)
-
-* GitHub Actions workflow builds the Docker image
-* Image is tagged and pushed to Google Artifact Registry
-
-Example Artifact Registry image format:
-
-```text
-REGION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
-```
+## What Terraform Provisions
+Once applied, Terraform automatically creates the following cloud resources:
+- Google Kubernetes Engine (GKE) cluster
+- Networking components (VPC, subnets, routing)
+- IAM roles and service accounts required for cluster operation
+---
+## CI Pipeline – Build and Push Docker Image to Artifact Registry
+In this step, a CI/CD pipeline is implemented using GitHub Actions to automate the process of building the application container image and pushing it to Google Artifact Registry.
+This ensures that every code change is validated, containerized, and versioned in a consistent and repeatable way before deployment.
+The GitHub Actions pipeline is triggered automatically on every push to the main branch.
+It performs the following tasks:
+- Checks out the latest application source code from GitHub
+- Builds a Docker image for the web application
+- Tags the image with a version for traceability
+- Authenticates securely with Google Cloud
+- Pushes the image to Google Artifact Registry
 
 **![Gitaction pipeline](https://github.com/smogalloyubio/02-Devops-project-NetflixClone-app/blob/main/picture/Screenshot%202026-01-24%20at%2011.12.05.png)**
 
 
 google cloud artifact registry 
 ![artifact registry](https://github.com/smogalloyubio/02-Devops-project-NetflixClone-app/blob/main/picture/Screenshot%202026-01-24%20at%2011.11.50.png)
-
-
-
 ---
 
-### Step 4: Configure Kubernetes Manifests
+## Step 4: Kubernetes Cluster Configuration and Manifests
+After provisioning the Kubernetes cluster using Terraform, the next step was to configure the application workloads using Kubernetes manifests.
 
-* Define Kubernetes YAML manifests:
-
-  * Namespace
-  * Deployment
-  * Service
- 
-
-Apply namespace locally (optional validation):
-
-```bash
-gcloud container clusters create netflix-cluster \
-    --project=Porject_id \
-    --zone=us-central1-a \
-    --num-nodes=2 \
-    --machine-type=e2-standard-2 \
-    --enable-ip-alias \
-    --release-channel=regular \
-    --workload-pool=project_id.svc.id.goog \
-    --scopes="https://www.googleapis.com/auth/cloud-platform"
-kubectl crate namespace  dev 
- kubectl get nodes
- kubectl  get namespace  --all-namespace
-kubectl  config  get-context
-
-```
 ![Google kubernstes cluster](https://github.com/smogalloyubio/02-Devops-project-NetflixClone-app/blob/main/picture/Screenshot%202026-01-24%20at%2012.33.10.png)
-
-
-
 ---
-
-### Step 5: Install and Configure Argo CD
-
-Install Argo CD on GKE:
-
-```bash
+## Step 5: Install and Configure Argo CD (GitOps Controller)
+In this step, Argo CD is installed on the Kubernetes cluster to enable GitOps-based continuous delivery. It acts as the reconciliation engine that continuously syncs the desired state stored in GitHub with the actual state of the Kubernetes cluster.
+```
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl get pods - n argocd
-#checl the  service of teh argocd
+# check the  service of the argocd
 kubectl  get svc -n argocd
-# chnage the  service orgocd to loadbalancer
+# change the  service orgocd to loadbalancer
 kubectl  patch  svc/argocd-server -n argocd -p
-# connect the git repo to argocd 
+# connect the git repo to argocd
+Create Argo CD Application pointing to GitHub repo
+Enable auto-sync
+kubectl get secret argocd-initial-admin-secret -n argocd \
+-o jsonpath="{.data.password}" | base64 -d
+
+kubectl patch svc argocd-server -n argocd \
+-p '{"spec": {"type": "LoadBalancer"}}'
+argocd login <ARGOCD_SERVER_IP> --username admin --password <PASSWORD> --insecure
+argocd repo add https://github.com/smogalloyubio/GoogleCloud-Disaster-Recovery-project.git
+
 ```
-
-* Create Argo CD Application pointing to GitHub repo
-* Enable auto-sync
-
 ![argocd cd](https://github.com/smogalloyubio/02-Devops-project-NetflixClone-app/blob/main/picture/Screenshot%202026-01-23%20at%2023.38.26.png)
 
 ---
 
 ### Step 6: Deploy Application via GitOps
-
-* Push Kubernetes manifest changes to GitHub
-* Argo CD automatically deploys to GKE
-
-Verify deployment:
-
-```bash
+- Push Kubernetes manifest changes to GitHub
+- Argo CD automatically deploys to GKE
+  
+```
 kubectl get pods -n namespace
 kuebctl get all --all-namespace
 kubectl get pods -n dev
 #check  deployment of the  namespace
 kubectl get pods -n  dev 
+argocd app create webapp \
+--repo  https://github.com/smogalloyubio/GoogleCloud-Disaster-Recovery-project.git
+--path apps \
+--dest-server https://kubernetes.default.svc \
+--dest-namespace dev
+argocd app sync apps 
 
 ```
  **![ argocd  deployment](https://github.com/smogalloyubio/02-Devops-project-NetflixClone-app/blob/main/picture/Screenshot%202026-01-23%20at%2023.45.03.png):**
-
-
 
 ---
 
