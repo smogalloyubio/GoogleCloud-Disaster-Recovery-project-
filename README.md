@@ -294,6 +294,7 @@ The project follows cloud security best practices to ensure a secure and control
 - Sensitive information and secrets are not stored in the Git repository
 - GitOps provides a complete audit trail of all infrastructure and deployment changes
 ---
+![storage bucket for velero backup](https://github.com/smogalloyubio/GoogleCloud-Disaster-Recovery-project-/blob/main/picture/Screenshot%202026-01-24%20at%2013.40.09.png)
 
 
 
