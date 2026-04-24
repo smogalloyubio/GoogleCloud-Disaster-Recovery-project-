@@ -88,7 +88,7 @@ gcloud  auth  application-deafult login
 ### Step 2: Provision GKE with Terraform
 
 1. Navigate to the Terraform directory:
-
+![terraform deployment](https://github.com/smogalloyubio/GoogleCloud-Disaster-Recovery-project-/blob/main/picture/Screenshot%202026-01-24%20at%2011.47.27.png)
 ```
 sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
 wget -O- https://apt.releases.hashicorp.com/gpg | \
